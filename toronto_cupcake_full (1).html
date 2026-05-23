@@ -1,0 +1,593 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Toronto Cupcake</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --pink:#F28B82;--pink-light:#FDE8E6;--pink-dark:#C0534A;
+    --cream:#FFF8F3;--brown:#3B1F14;--brown-mid:#7A3B28;
+    --gray:#6B6B6B;--white:#FFFFFF;--nav-h:68px;
+    --font-display:'Playfair Display',serif;--font-body:'DM Sans',sans-serif;
+    --shadow:0 4px 24px rgba(59,31,20,.10);--radius:14px;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  body{font-family:var(--font-body);background:var(--cream);color:var(--brown);}
+
+  /* NAV */
+  nav{position:sticky;top:0;z-index:100;height:var(--nav-h);background:var(--white);border-bottom:1px solid #F0E0DA;display:flex;align-items:center;padding:0 60px;gap:32px;box-shadow:0 2px 12px rgba(59,31,20,.06);}
+  .nav-logo{display:flex;align-items:center;gap:10px;text-decoration:none;margin-right:auto;}
+  .nav-logo-icon{width:38px;height:38px;border-radius:50%;background:var(--pink);display:flex;align-items:center;justify-content:center;font-size:18px;}
+  .nav-logo-text{font-family:var(--font-display);font-size:18px;color:var(--brown);}
+  nav a{font-size:13px;font-weight:500;color:var(--gray);text-decoration:none;padding:6px 0;border-bottom:2px solid transparent;transition:color .2s,border-color .2s;white-space:nowrap;}
+  nav a:hover,nav a.active{color:var(--pink-dark);border-bottom-color:var(--pink);}
+  .nav-cart{margin-left:4px;background:var(--pink);color:white;border:none;border-radius:20px;padding:8px 16px;font-family:var(--font-body);font-size:13px;font-weight:600;cursor:pointer;transition:background .2s;white-space:nowrap;}
+  .nav-cart:hover{background:var(--pink-dark);}
+
+  /* PAGES */
+  .page{display:none;}.page.active{display:block;}
+
+  /* ANNOUNCE BAR */
+  .announce{background:#E8A0B4;color:var(--brown);text-align:center;padding:10px;font-size:13px;font-weight:500;}
+
+  /* PAGE HERO */
+  .page-hero{background:var(--pink-light);padding:48px 60px 40px;border-bottom:1px solid #F0D8D4;}
+  .page-hero h1{font-family:var(--font-display);font-size:40px;color:var(--brown);}
+  .page-hero p{color:var(--gray);font-size:15px;margin-top:8px;max-width:600px;line-height:1.6;}
+
+  /* SECTION */
+  .section{padding:56px 60px;}
+  .section-title{font-family:var(--font-display);font-size:32px;color:var(--brown);margin-bottom:8px;}
+  .section-sub{color:var(--gray);font-size:15px;line-height:1.6;margin-bottom:32px;max-width:680px;}
+
+  /* TWO COL */
+  .two-col{display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:start;}
+  .three-col{display:grid;grid-template-columns:1fr 1fr 1fr;gap:32px;}
+
+  /* CARD */
+  .card{background:white;border-radius:var(--radius);padding:28px;box-shadow:var(--shadow);}
+  .card h3{font-family:var(--font-display);font-size:20px;margin-bottom:12px;}
+  .card p{font-size:14px;color:var(--gray);line-height:1.7;}
+
+  /* IMG PLACEHOLDER */
+  .img-ph{border-radius:var(--radius);overflow:hidden;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:8px;color:var(--gray);font-size:13px;}
+
+  /* BTN */
+  .btn-primary{display:inline-flex;align-items:center;gap:8px;background:var(--brown);color:white;font-family:var(--font-body);font-size:14px;font-weight:600;padding:13px 26px;border-radius:30px;border:none;cursor:pointer;text-decoration:none;transition:background .2s;}
+  .btn-primary:hover{background:var(--brown-mid);}
+  .btn-pink{display:inline-flex;align-items:center;gap:8px;background:var(--pink);color:white;font-family:var(--font-body);font-size:14px;font-weight:600;padding:13px 26px;border-radius:30px;border:none;cursor:pointer;text-decoration:none;transition:background .2s;}
+  .btn-pink:hover{background:var(--pink-dark);}
+
+  /* PINK PILL LINKS (like original site) */
+  .pill-list{display:flex;flex-direction:column;gap:10px;}
+  .pill-item{background:#F0B8CC;border-radius:10px;padding:14px 20px;font-size:14px;color:var(--brown);font-weight:500;cursor:pointer;transition:background .15s;border:none;text-align:left;width:100%;}
+  .pill-item:hover{background:var(--pink);}
+
+  /* FAQ */
+  .faq-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:24px;}
+  .faq-col h3{font-size:11px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--gray);margin-bottom:16px;}
+  .faq-pill{background:#F0B8CC;border-radius:10px;padding:12px 16px;font-size:13px;color:var(--brown);cursor:pointer;margin-bottom:8px;transition:background .15s;border:none;text-align:left;width:100%;}
+  .faq-pill:hover{background:var(--pink);color:white;}
+
+  /* ABOUT - dot divider */
+  .dots{color:#C8A0A8;letter-spacing:3px;font-size:14px;margin:20px 0;}
+
+  /* COMMUNITY CARD */
+  .community-event{background:white;border-radius:var(--radius);padding:24px;box-shadow:var(--shadow);margin-bottom:20px;}
+  .community-event h3{font-family:var(--font-display);font-size:18px;color:var(--brown);margin-bottom:8px;}
+  .community-event p{font-size:14px;color:var(--gray);line-height:1.7;}
+  .community-event .tag{display:inline-block;background:var(--pink-light);color:var(--pink-dark);font-size:11px;font-weight:600;padding:4px 12px;border-radius:20px;margin-bottom:10px;}
+
+  /* DELIVERY */
+  .delivery-feature{display:flex;gap:16px;margin-bottom:24px;align-items:flex-start;}
+  .delivery-icon{width:44px;height:44px;border-radius:50%;background:var(--pink-light);display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;}
+  .delivery-text h4{font-size:15px;font-weight:600;color:var(--brown);margin-bottom:4px;}
+  .delivery-text p{font-size:13px;color:var(--gray);line-height:1.6;}
+
+  /* OCCASIONS LIST */
+  .occasion-list{list-style:none;display:flex;flex-direction:column;gap:8px;}
+  .occasion-list li a{display:block;padding:12px 20px;background:var(--pink-light);border-radius:10px;color:var(--pink-dark);font-size:14px;font-weight:600;text-decoration:none;transition:background .15s;}
+  .occasion-list li a:hover{background:var(--pink);color:white;}
+
+  /* FOOTER */
+  footer{background:#2A1509;padding:32px 60px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:16px;}
+  footer p{font-size:12px;color:rgba(255,255,255,.4);}
+  .footer-links{display:flex;gap:20px;flex-wrap:wrap;}
+  .footer-links a{font-size:12px;color:rgba(255,255,255,.5);text-decoration:none;transition:color .15s;}
+  .footer-links a:hover{color:var(--pink);}
+
+  /* ABOUT MICHELLE CARD */
+  .michelle-card{background:white;border-radius:var(--radius);padding:28px;box-shadow:var(--shadow);text-align:center;}
+  .michelle-img{width:100%;height:260px;background:linear-gradient(135deg,#FDDDD8,#FAC5BD);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:64px;margin-bottom:16px;}
+  .michelle-card h3{font-family:var(--font-display);font-size:20px;margin-bottom:10px;}
+  .michelle-card p{font-size:13px;color:var(--gray);line-height:1.7;}
+
+  /* CUPCAKE FLAVORS GRID */
+  .flavors-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;}
+  .flavor-card{background:white;border-radius:var(--radius);overflow:hidden;box-shadow:var(--shadow);}
+  .flavor-img{height:140px;display:flex;align-items:center;justify-content:center;font-size:48px;}
+  .flavor-info{padding:14px;}
+  .flavor-name{font-weight:600;font-size:14px;color:var(--brown);}
+  .flavor-desc{font-size:12px;color:var(--gray);margin-top:3px;}
+
+  body p{line-height:1.7;}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a class="nav-logo" href="#" onclick="showPage('home');return false;">
+    <div class="nav-logo-icon">🧁</div>
+    <span class="nav-logo-text">Toronto Cupcake</span>
+  </a>
+  <a href="#" id="nav-home" class="active" onclick="showPage('home');return false;">Home</a>
+  <a href="#" id="nav-about" onclick="showPage('about');return false;">About</a>
+  <a href="#" id="nav-order" onclick="showPage('order');return false;">Order</a>
+  <a href="#" id="nav-corporate" onclick="showPage('corporate');return false;">Corporate Events</a>
+  <a href="#" id="nav-occasions" onclick="showPage('occasions');return false;">Occasions</a>
+  <a href="#" id="nav-community" onclick="showPage('community');return false;">Community</a>
+  <a href="#" id="nav-faqs" onclick="showPage('faqs');return false;">FAQs</a>
+  <a href="#" id="nav-resources" onclick="showPage('resources');return false;">Resources</a>
+  <a href="#" id="nav-delivery" onclick="showPage('delivery');return false;">Delivery</a>
+  <a href="#" id="nav-contact" onclick="showPage('contact');return false;">Contact</a>
+  <button class="nav-cart" onclick="showPage('cart')">🛒 Cart</button>
+</nav>
+
+<!-- ══ HOME (stub — your 4 pages go here) ══ -->
+<div id="page-home" class="page active">
+  <div class="announce">✨ Check out our new Corporate Event Logo Cupcakes!</div>
+  <div style="padding:80px 60px;text-align:center;">
+    <h1 style="font-family:var(--font-display);font-size:40px;margin-bottom:16px;">Your existing Home page goes here</h1>
+    <p style="color:var(--gray);font-size:16px;margin-bottom:32px;">Copy-paste your 4 existing pages (Home, Order, Contact, Cart) into this file to complete the full website.</p>
+    <button class="btn-primary" onclick="showPage('about')">See new pages → About</button>
+  </div>
+  <footer>
+    <p>© 2025 Toronto Cupcake. All rights reserved.</p>
+    <div class="footer-links"><a href="#">Home</a><a href="#">About</a><a href="#">Contact</a><a href="#">Occasions</a><a href="#">Privacy Policy</a></div>
+  </footer>
+</div>
+
+<!-- ══ ABOUT ══ -->
+<div id="page-about" class="page">
+  <div class="announce">✨ Check out our new Corporate Event Logo Cupcakes!</div>
+  <div class="page-hero">
+    <h1>About Toronto Cupcake</h1>
+    <p>Toronto's leading destination for gourmet handcrafted cupcakes since 2010.</p>
+  </div>
+
+  <div class="section">
+    <div class="two-col">
+      <div>
+        <h2 style="font-family:var(--font-display);font-size:28px;color:var(--pink-dark);margin-bottom:12px;">About Us</h2>
+        <div class="dots">.............</div>
+        <p style="font-size:15px;color:var(--gray);margin-bottom:20px;">Welcome to Toronto Cupcake! Founded in 2010, we are proud to be Toronto's leading destination for gourmet branded cupcakes. Whether you're celebrating a birthday, hosting a corporate event, or simply indulging in a sweet treat, our handcrafted cupcakes are made fresh daily using the finest ingredients.</p>
+        <p style="font-size:15px;color:var(--gray);margin-bottom:20px;">We love the idea that our treats are making people happy every time they bite into one. How much fun is that!</p>
+        <p style="font-size:15px;color:var(--gray);margin-bottom:28px;">At Toronto Cupcake, we believe in giving back to the community. Since our inception, we have partnered with numerous local organizations, donating our time and delicious cupcakes to support causes that make a difference in local and regional communities.</p>
+        <div class="dots">.............</div>
+        <div style="display:flex;gap:12px;margin-top:24px;flex-wrap:wrap;">
+          <button class="btn-primary" onclick="showPage('order')">Order Online →</button>
+          <button class="btn-pink" onclick="showPage('contact')">Get in Touch</button>
+        </div>
+      </div>
+      <div>
+        <div class="michelle-card">
+          <div class="michelle-img">👩‍🍳</div>
+          <h3>About Michelle</h3>
+          <div class="dots" style="text-align:center;">.............</div>
+          <p>Toronto Cupcake was created by Michelle Harrison to pursue her love of baking. Inspired by her mother, Michelle opened Toronto Cupcake in August 2010 as one of Canada's first gourmet cupcakeries.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div style="background:var(--brown);padding:48px 60px;">
+    <h2 style="font-family:var(--font-display);font-size:28px;color:white;margin-bottom:32px;text-align:center;">Our Values</h2>
+    <div class="three-col">
+      <div style="text-align:center;color:white;">
+        <div style="font-size:36px;margin-bottom:12px;">🌿</div>
+        <h3 style="font-size:16px;font-weight:600;margin-bottom:8px;">Fresh Ingredients</h3>
+        <p style="font-size:13px;color:rgba(255,255,255,.65);line-height:1.6;">Baked fresh daily using only the finest, highest quality ingredients.</p>
+      </div>
+      <div style="text-align:center;color:white;">
+        <div style="font-size:36px;margin-bottom:12px;">🤝</div>
+        <h3 style="font-size:16px;font-weight:600;margin-bottom:8px;">Community First</h3>
+        <p style="font-size:13px;color:rgba(255,255,255,.65);line-height:1.6;">Proud supporters of local organizations and charitable causes across the GTA.</p>
+      </div>
+      <div style="text-align:center;color:white;">
+        <div style="font-size:36px;margin-bottom:12px;">🎨</div>
+        <h3 style="font-size:16px;font-weight:600;margin-bottom:8px;">Custom Designs</h3>
+        <p style="font-size:13px;color:rgba(255,255,255,.65);line-height:1.6;">Every cupcake is a canvas — from corporate logos to wedding themes.</p>
+      </div>
+    </div>
+  </div>
+
+  <footer>
+    <p>© 2025 Toronto Cupcake. All rights reserved.</p>
+    <div class="footer-links"><a href="#">Home</a><a href="#">About</a><a href="#">Contact</a><a href="#">Corporate Events</a><a href="#">Privacy Policy</a></div>
+  </footer>
+</div>
+
+<!-- ══ CORPORATE EVENTS ══ -->
+<div id="page-corporate" class="page">
+  <div class="announce">✨ New: Corporate Event Logo Cupcakes — make your brand unforgettable!</div>
+  <div class="page-hero">
+    <h1>Corporate Logo Cupcakes & Branding Events</h1>
+    <p>Custom branded cupcakes that make your corporate events stand out.</p>
+  </div>
+
+  <div class="section">
+    <div class="two-col">
+      <div>
+        <div style="background:white;border-radius:var(--radius);padding:20px;box-shadow:var(--shadow);">
+          <div style="height:300px;background:linear-gradient(135deg,#FFF0D0,#FFE0A0);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:80px;margin-bottom:16px;">🏢🧁</div>
+          <p style="font-size:13px;color:var(--gray);text-align:center;">Some of Our Clients (Direct or Through Others)</p>
+          <div style="display:flex;justify-content:center;gap:8px;margin-top:12px;">
+            <div style="width:10px;height:10px;border-radius:50%;background:var(--pink);"></div>
+            <div style="width:10px;height:10px;border-radius:50%;background:#E0C8C0;"></div>
+            <div style="width:10px;height:10px;border-radius:50%;background:#E0C8C0;"></div>
+            <div style="width:10px;height:10px;border-radius:50%;background:#E0C8C0;"></div>
+          </div>
+        </div>
+      </div>
+      <div>
+        <h2 style="font-family:var(--font-display);font-size:26px;margin-bottom:16px;">Elevate Your Brand Experience</h2>
+        <div class="dots">.............</div>
+        <p style="font-size:15px;color:var(--gray);margin-bottom:16px;line-height:1.7;">At Toronto Cupcake, we believe that custom-branded cupcakes are more than just a treat — they're a memorable way to make your corporate events stand out. Whether you're launching a new product, thanking loyal clients, or hosting a team celebration, our logo cupcakes are the perfect addition to elevate your brand presence.</p>
+        <p style="font-size:15px;color:var(--gray);margin-bottom:24px;line-height:1.7;">Each cupcake is designed with your corporate colors, logos, and slogans to create a cohesive and visually stunning display that's sure to impress.</p>
+        <div class="dots">.............</div>
+        <h3 style="font-family:var(--font-display);font-size:20px;color:var(--pink-dark);margin:20px 0 12px;">Custom Branded Cupcakes for Any Event</h3>
+        <p style="font-size:14px;color:var(--gray);margin-bottom:24px;line-height:1.7;">From small gatherings to large-scale corporate events, our custom cupcakes make a statement. We work closely with you to reproduce logos and designs on edible fondant, ensuring your brand shines through.</p>
+        <button class="btn-primary" onclick="showPage('contact')">Request a Quote →</button>
+      </div>
+    </div>
+  </div>
+
+  <div style="background:var(--pink-light);padding:48px 60px;">
+    <h2 style="font-family:var(--font-display);font-size:28px;text-align:center;margin-bottom:32px;">Why Choose Us for Corporate Events?</h2>
+    <div class="three-col">
+      <div class="card">
+        <div style="font-size:32px;margin-bottom:12px;">🎯</div>
+        <h3>Edible Logo Printing</h3>
+        <p>We reproduce your exact logo on high-quality edible fondant using food-safe printing technology.</p>
+      </div>
+      <div class="card">
+        <div style="font-size:32px;margin-bottom:12px;">📦</div>
+        <h3>Premium Packaging</h3>
+        <p>Special branded packaging and display options to match your corporate theme and presentation needs.</p>
+      </div>
+      <div class="card">
+        <div style="font-size:32px;margin-bottom:12px;">🚀</div>
+        <h3>Reliable Delivery</h3>
+        <p>On-time delivery across Toronto and the GTA for events of any size — from 12 to 1,200 cupcakes.</p>
+      </div>
+    </div>
+  </div>
+
+  <footer>
+    <p>© 2025 Toronto Cupcake. All rights reserved.</p>
+    <div class="footer-links"><a href="#">Home</a><a href="#">About</a><a href="#">Contact</a><a href="#">Corporate Events</a><a href="#">Privacy Policy</a></div>
+  </footer>
+</div>
+
+<!-- ══ OCCASIONS ══ -->
+<div id="page-occasions" class="page">
+  <div class="announce">✨ Custom cupcakes for every special moment!</div>
+  <div class="page-hero">
+    <h1>Celebrate Every Occasion with Custom Cupcakes</h1>
+    <p>Whatever your celebration, we craft the perfect cupcake for it.</p>
+  </div>
+
+  <div class="section">
+    <div class="two-col">
+      <div>
+        <h2 style="font-family:var(--font-display);font-size:26px;margin-bottom:16px;">Made for Your Moment</h2>
+        <p style="font-size:15px;color:var(--gray);margin-bottom:16px;line-height:1.7;">At Toronto Cupcake, we believe every celebration deserves a sweet touch. Our beautifully crafted, delicious cupcakes are perfect for any occasion — whether it's an elegant wedding, a fun-filled birthday party, or a themed event that requires something truly special.</p>
+        <p style="font-size:15px;color:var(--gray);margin-bottom:16px;line-height:1.7;">We work with you to customize every detail, from flavors and colors to intricate designs that reflect your event's unique theme.</p>
+        <p style="font-size:15px;color:var(--gray);margin-bottom:24px;line-height:1.7;">We also offer cupcake stand rentals to create stunning displays, and even build custom cupcake stands tailored to your vision.</p>
+        <button class="btn-primary" onclick="showPage('contact')">Plan Your Event →</button>
+      </div>
+      <div>
+        <h2 style="font-family:var(--font-display);font-size:22px;margin-bottom:20px;">Select an Occasion</h2>
+        <ul class="occasion-list">
+          <li><a href="#" onclick="return false;">💍 Weddings</a></li>
+          <li><a href="#" onclick="return false;">🎂 Birthdays</a></li>
+          <li><a href="#" onclick="return false;">💌 Engagement Parties</a></li>
+          <li><a href="#" onclick="return false;">🎭 Theme Parties</a></li>
+          <li><a href="#" onclick="return false;">💑 Anniversaries</a></li>
+          <li><a href="#" onclick="return false;">🎓 Graduations</a></li>
+          <li><a href="#" onclick="return false;">🎄 Holidays</a></li>
+          <li><a href="#" onclick="return false;">🍼 Baby Showers</a></li>
+          <li><a href="#" onclick="return false;">🎉 Wrap Parties</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div style="background:var(--brown);padding:48px 60px;text-align:center;">
+    <h2 style="font-family:var(--font-display);font-size:28px;color:white;margin-bottom:12px;">Looking for Corporate Custom Cupcakes?</h2>
+    <p style="color:rgba(255,255,255,.7);font-size:15px;margin-bottom:24px;">Check out our Corporate Events page for branded cupcakes, logo printing, and large-scale orders.</p>
+    <button class="btn-pink" onclick="showPage('corporate')">Corporate Events →</button>
+  </div>
+
+  <footer>
+    <p>© 2025 Toronto Cupcake. All rights reserved.</p>
+    <div class="footer-links"><a href="#">Home</a><a href="#">About</a><a href="#">Occasions</a><a href="#">Corporate Events</a><a href="#">Privacy Policy</a></div>
+  </footer>
+</div>
+
+<!-- ══ COMMUNITY ══ -->
+<div id="page-community" class="page">
+  <div class="announce">Corporate event cupcakes — proudly giving back since 2010</div>
+  <div class="page-hero">
+    <h1>Giving Back to Our Community</h1>
+    <p>Toronto Cupcake is committed to making a positive impact — locally and globally.</p>
+  </div>
+
+  <div class="section">
+    <div class="two-col">
+      <div>
+        <h2 style="font-family:var(--font-display);font-size:26px;margin-bottom:8px;">Our Commitment</h2>
+        <div class="dots">.............</div>
+        <p style="font-size:15px;color:var(--gray);margin-bottom:16px;line-height:1.7;">Toronto Cupcake works with many neighbourhood and community organisations in the GTA. Since opening in 2010, Toronto Cupcake has been willing to assist by donating cupcakes, time, and caring to many charitable causes.</p>
+        <p style="font-size:15px;color:var(--gray);margin-bottom:24px;line-height:1.7;">We believe that a business has a responsibility to support the world around it — not just locally, but globally. From feeding families in our own neighbourhood to standing in solidarity with communities facing hardship around the world.</p>
+        <div style="background:var(--pink-light);border-left:4px solid var(--pink);border-radius:0 10px 10px 0;padding:20px 24px;margin-bottom:24px;">
+          <p style="font-size:15px;color:var(--brown);font-style:italic;line-height:1.7;">"We make a living by what we get. We make a life by what we give."</p>
+          <p style="font-size:13px;color:var(--gray);margin-top:8px;font-weight:600;">— Sir Winston Churchill</p>
+        </div>
+        <div class="dots">.............</div>
+        <h3 style="font-family:var(--font-display);font-size:20px;margin:20px 0 8px;">Land Acknowledgement</h3>
+        <p style="font-size:14px;color:var(--gray);line-height:1.7;">Toronto Cupcake acknowledges that Toronto operates on the traditional territory of many nations. We are committed to reconciliation and supporting Indigenous-led initiatives in our community.</p>
+      </div>
+      <div>
+        <div style="background:white;border-radius:var(--radius);padding:20px;box-shadow:var(--shadow);margin-bottom:20px;text-align:center;">
+          <div style="height:220px;background:linear-gradient(135deg,#FDE8E6,#F0C8C0);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:80px;margin-bottom:12px;">🌍🧁</div>
+          <p style="font-size:13px;color:var(--gray);">Toronto Cupcake — baking with purpose</p>
+        </div>
+
+        <div class="community-event">
+          <span class="tag">Global Solidarity</span>
+          <h3>Standing with Palestine 🇵🇸</h3>
+          <p>Toronto Cupcake stands in solidarity with the people of Palestine. We believe in the dignity, safety, and humanity of all people. A portion of proceeds from select cupcake sales is donated to humanitarian relief efforts supporting families affected by the conflict in Gaza.</p>
+        </div>
+
+        <div class="community-event">
+          <span class="tag">Local Initiative</span>
+          <h3>GTA Food Bank Donations</h3>
+          <p>Every week, unsold cupcakes are donated to local shelters and food banks across the Greater Toronto Area. Since 2010, we have donated thousands of cupcakes to families in need.</p>
+        </div>
+
+        <div class="community-event">
+          <span class="tag">Charity Events</span>
+          <h3>Community Bake Sales</h3>
+          <p>We partner with local schools, mosques, churches, and community centres to host charity bake sales — raising funds for causes that matter to our neighbours.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <footer>
+    <p>© 2025 Toronto Cupcake. All rights reserved.</p>
+    <div class="footer-links"><a href="#">Home</a><a href="#">About</a><a href="#">Community</a><a href="#">Contact</a><a href="#">Privacy Policy</a></div>
+  </footer>
+</div>
+
+<!-- ══ FAQs ══ -->
+<div id="page-faqs" class="page">
+  <div class="announce">✨ Have a question? We've got the answer!</div>
+  <div class="page-hero">
+    <h1>Frequently Asked Questions</h1>
+    <p>Everything you need to know about ordering, delivery, and our cupcakes.</p>
+  </div>
+
+  <div class="section">
+    <div class="faq-grid">
+      <div class="faq-col">
+        <h3>Ordering</h3>
+        <button class="faq-pill">How many days notice for a custom order?</button>
+        <button class="faq-pill">What is the smallest order I can make?</button>
+        <button class="faq-pill">How much advanced notice to place an order?</button>
+        <button class="faq-pill">How do I pay for my order?</button>
+        <button class="faq-pill">What credit cards do you accept?</button>
+        <button class="faq-pill">When do I have to pay?</button>
+      </div>
+      <div class="faq-col">
+        <h3>Delivery</h3>
+        <button class="faq-pill">Does Toronto Cupcake deliver?</button>
+        <button class="faq-pill">What are the delivery fees?</button>
+        <button class="faq-pill">What are your delivery times?</button>
+        <button class="faq-pill">Can I pick up instead of delivery?</button>
+        <button class="faq-pill">What if no one is home when you deliver?</button>
+      </div>
+      <div class="faq-col">
+        <h3>Ingredients</h3>
+        <button class="faq-pill">Do you have gluten free cupcakes?</button>
+        <button class="faq-pill">Do you use preservatives?</button>
+        <button class="faq-pill">Toronto Cupcake Allergen Alert</button>
+      </div>
+      <div class="faq-col">
+        <h3>Other</h3>
+        <button class="faq-pill">Can I pick up my order?</button>
+        <button class="faq-pill">Do you offer corporate event services?</button>
+        <button class="faq-pill">How do I store my cupcakes?</button>
+      </div>
+    </div>
+  </div>
+
+  <footer>
+    <p>© 2025 Toronto Cupcake. All rights reserved.</p>
+    <div class="footer-links"><a href="#">Home</a><a href="#">About</a><a href="#">Contact</a><a href="#">Occasions</a><a href="#">Privacy Policy</a></div>
+  </footer>
+</div>
+
+<!-- ══ RESOURCES ══ -->
+<div id="page-resources" class="page">
+  <div class="announce">✨ Planning your big day? These resources will help!</div>
+  <div class="page-hero">
+    <h1>Resources for Weddings, Engagements & Birthdays</h1>
+    <p>Helpful links and guides from partners we trust and recommend.</p>
+  </div>
+
+  <div class="section">
+    <div class="two-col">
+      <div>
+        <h2 style="font-family:var(--font-display);font-size:24px;margin-bottom:16px;">Recommended by Toronto Cupcake</h2>
+        <p style="font-size:15px;color:var(--gray);margin-bottom:16px;line-height:1.7;">If you need more help in planning or ideas, try clicking on one of the links to the right. We have either used their services, bought their products, or have had customers tell us about them and what a wonderful experience they had.</p>
+        <p style="font-size:15px;color:var(--gray);margin-bottom:24px;line-height:1.7;">Don't forget to check out our <a href="#" onclick="showPage('occasions');return false;" style="color:var(--pink-dark);font-weight:600;">Occasions page</a> for custom cupcakes tailored to your event!</p>
+        <div style="background:var(--pink-light);border-radius:var(--radius);padding:20px;margin-bottom:20px;">
+          <h3 style="font-family:var(--font-display);font-size:18px;margin-bottom:8px;">Cupcake Stand Rentals</h3>
+          <p style="font-size:13px;color:var(--gray);line-height:1.6;">We also offer cupcake stand rentals to create stunning displays for your wedding or event. Contact us to learn more.</p>
+          <button class="btn-pink" style="margin-top:14px;font-size:13px;padding:10px 20px;" onclick="showPage('contact')">Ask About Rentals →</button>
+        </div>
+      </div>
+      <div>
+        <h2 style="font-family:var(--font-display);font-size:22px;margin-bottom:20px;">Helpful Links</h2>
+        <div class="pill-list">
+          <button class="pill-item">📗 The Guide to Sustainable, Zero-Waste, Ethical Weddings</button>
+          <button class="pill-item">🎨 Powerpoint Männchen — Creative Templates</button>
+          <button class="pill-item">🧁 Cupcakes Take The Cake — Inspiration Blog</button>
+          <button class="pill-item">🌸 416 5 Flower — Toronto Florist</button>
+          <button class="pill-item">🍰 Call Me Cupcake — Swedish Baking Blog</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <footer>
+    <p>© 2025 Toronto Cupcake. All rights reserved.</p>
+    <div class="footer-links"><a href="#">Home</a><a href="#">About</a><a href="#">Occasions</a><a href="#">Contact</a><a href="#">Privacy Policy</a></div>
+  </footer>
+</div>
+
+<!-- ══ DELIVERY ══ -->
+<div id="page-delivery" class="page">
+  <div class="announce">✨ Check out our cupcake delivery services across the GTA!</div>
+  <div class="page-hero">
+    <h1>Cupcake Delivery Across Toronto & the GTA</h1>
+    <p>Fresh, handcrafted cupcakes delivered right to your door.</p>
+  </div>
+
+  <div class="section">
+    <div class="two-col">
+      <div>
+        <div style="background:white;border-radius:var(--radius);padding:24px;box-shadow:var(--shadow);">
+          <div style="height:320px;background:linear-gradient(135deg,#FDE8E6,#FAC5BD);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:100px;">🛵</div>
+        </div>
+      </div>
+      <div>
+        <h2 style="font-family:var(--font-display);font-size:26px;margin-bottom:8px;">Order Delicious Custom Cupcakes for Any Occasion!</h2>
+        <div class="dots">.............</div>
+        <p style="font-size:15px;color:var(--pink-dark);font-weight:500;margin-bottom:16px;line-height:1.7;">Toronto Cupcake offers a swift and reliable cupcake delivery service throughout Toronto and the Greater Toronto Area (GTA).</p>
+        <div class="dots">.............</div>
+        <h3 style="font-family:var(--font-display);font-size:20px;color:var(--pink-dark);margin:20px 0 20px;">Why Choose Toronto Cupcake Delivery?</h3>
+
+        <div class="delivery-feature">
+          <div class="delivery-icon">🚀</div>
+          <div class="delivery-text">
+            <h4>Fast Delivery</h4>
+            <p>Need cupcakes ASAP? We offer fast delivery for most areas within Toronto and the GTA. Just place your order before our cut-off time to ensure your treats arrive fresh.</p>
+          </div>
+        </div>
+        <div class="delivery-feature">
+          <div class="delivery-icon">🎨</div>
+          <div class="delivery-text">
+            <h4>Custom Designs</h4>
+            <p>Our cupcakes are not only delicious but also visually stunning. Customize your order with corporate logos, themed designs, or personalized messages.</p>
+          </div>
+        </div>
+        <div class="delivery-feature">
+          <div class="delivery-icon">📍</div>
+          <div class="delivery-text">
+            <h4>Wide Coverage</h4>
+            <p>From downtown Toronto to Hamilton, Mississauga, Vaughan, Scarborough, and beyond — our delivery service spans approximately 80km around the city.</p>
+          </div>
+        </div>
+
+        <div class="dots">.............</div>
+        <p style="font-size:15px;color:var(--gray);margin:20px 0 24px;line-height:1.7;">Ready to order? Just click below and select delivery when asked.</p>
+        <button class="btn-primary" onclick="showPage('order')">Order Now →</button>
+      </div>
+    </div>
+  </div>
+
+  <div style="background:var(--pink-light);padding:48px 60px;">
+    <h2 style="font-family:var(--font-display);font-size:28px;text-align:center;margin-bottom:32px;">Delivery Coverage Areas</h2>
+    <div class="three-col">
+      <div class="card" style="text-align:center;">
+        <div style="font-size:32px;margin-bottom:8px;">🏙️</div>
+        <h3 style="font-size:16px;">Downtown Toronto</h3>
+        <p style="font-size:13px;">Same-day delivery available Mon – Sat</p>
+      </div>
+      <div class="card" style="text-align:center;">
+        <div style="font-size:32px;margin-bottom:8px;">🌆</div>
+        <h3 style="font-size:16px;">Greater Toronto Area</h3>
+        <p style="font-size:13px;">Mississauga, Vaughan, Scarborough & more</p>
+      </div>
+      <div class="card" style="text-align:center;">
+        <div style="font-size:32px;margin-bottom:8px;">🗺️</div>
+        <h3 style="font-size:16px;">Extended Coverage</h3>
+        <p style="font-size:13px;">Hamilton, Oakville & surrounding areas — up to 80km</p>
+      </div>
+    </div>
+  </div>
+
+  <div style="padding:40px 60px;background:var(--white);">
+    <h2 style="font-family:var(--font-display);font-size:22px;margin-bottom:16px;">For any delivery questions, please call us at:</h2>
+    <div style="display:flex;gap:24px;flex-wrap:wrap;">
+      <div style="display:flex;align-items:center;gap:10px;"><span style="font-size:20px;">📞</span><span style="font-size:16px;font-weight:600;color:var(--brown);">+1 (601) 753-3508</span></div>
+      <div style="display:flex;align-items:center;gap:10px;"><span style="font-size:20px;">✉️</span><span style="font-size:16px;font-weight:600;color:var(--pink-dark);">hello@torontocupcake.com</span></div>
+    </div>
+  </div>
+
+  <footer>
+    <p>© 2025 Toronto Cupcake. All rights reserved.</p>
+    <div class="footer-links"><a href="#">Home</a><a href="#">About</a><a href="#">Contact</a><a href="#">Occasions</a><a href="#">Privacy Policy</a></div>
+  </footer>
+</div>
+
+<!-- STUBS for existing 4 pages -->
+<div id="page-order" class="page">
+  <div style="padding:80px 60px;text-align:center;"><h1 style="font-family:var(--font-display);font-size:36px;">Order / Cupcake page</h1><p style="color:var(--gray);margin-top:12px;">Paste your existing Order page content here.</p></div>
+</div>
+<div id="page-contact" class="page">
+  <div style="padding:80px 60px;text-align:center;"><h1 style="font-family:var(--font-display);font-size:36px;">Contact page</h1><p style="color:var(--gray);margin-top:12px;">Paste your existing Contact page content here.</p></div>
+</div>
+<div id="page-cart" class="page">
+  <div style="padding:80px 60px;text-align:center;"><h1 style="font-family:var(--font-display);font-size:36px;">Cart page</h1><p style="color:var(--gray);margin-top:12px;">Paste your existing Cart page content here.</p></div>
+</div>
+
+<script>
+function showPage(name){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.getElementById('page-'+name).classList.add('active');
+  document.querySelectorAll('nav a').forEach(a=>a.classList.remove('active'));
+  var el=document.getElementById('nav-'+name);
+  if(el)el.classList.add('active');
+  window.scrollTo(0,0);
+  // update URL so each page has its own link
+  var url=window.location.pathname+'?page='+name;
+  window.history.pushState({page:name},'',url);
+}
+
+// on load, read ?page= from URL
+(function(){
+  var params=new URLSearchParams(window.location.search);
+  var p=params.get('page');
+  if(p&&document.getElementById('page-'+p)){
+    showPage(p);
+  } else {
+    showPage('home');
+  }
+})();
+
+// handle browser back/forward buttons
+window.addEventListener('popstate',function(e){
+  var params=new URLSearchParams(window.location.search);
+  var p=params.get('page')||'home';
+  if(document.getElementById('page-'+p)) showPage(p);
+});
+</script>
+</body>
+</html>
